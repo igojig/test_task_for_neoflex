@@ -8,7 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.neoflex.vacation_pay_calculator.configuration.CalculatorParams;
+import ru.neoflex.vacation_pay_calculator.configuration.ServiceConstants;
 import ru.neoflex.vacation_pay_calculator.services.CalculatorServiceImpl;
 
 import java.math.BigDecimal;
@@ -21,12 +21,14 @@ import static org.mockito.Mockito.verify;
 public class CalculatorServiceTest {
 
     @Mock
-    private CalculatorParams calculatorParams;
+    private ServiceConstants serviceConstants;
 
     @InjectMocks
     private CalculatorServiceImpl calculatorService;
 
     /**
+     * @param ndflRate - ставка НДФЛ
+     * @param averageNumOfDaysInMonth - среднее кол-во дней в месяце
      * @param averageSalary - средняя зарплата за 12 месяцев -
      * @param vacationDays  - кол-во дней отпуска
      * @param expected      - корректное значение отпускных
@@ -38,14 +40,14 @@ public class CalculatorServiceTest {
                                                      BigDecimal averageSalary,
                                                      Long vacationDays,
                                                      BigDecimal expected) {
-        Mockito.when(calculatorParams.getNdflRate()).thenReturn(ndflRate);
-        Mockito.when(calculatorParams.getAverageNumOfDaysInMonth()).thenReturn(averageNumOfDaysInMonth);
+        Mockito.when(serviceConstants.getNdflRate()).thenReturn(ndflRate);
+        Mockito.when(serviceConstants.getAverageNumOfDaysInMonth()).thenReturn(averageNumOfDaysInMonth);
 
         BigDecimal actual = calculatorService.calculate(averageSalary, vacationDays);
 
         assertThat(expected).isEqualByComparingTo(actual);
-        verify(calculatorParams, times(1)).getAverageNumOfDaysInMonth();
-        verify(calculatorParams, times(1)).getNdflRate();
+        verify(serviceConstants, times(1)).getAverageNumOfDaysInMonth();
+        verify(serviceConstants, times(1)).getNdflRate();
     }
 
     @ParameterizedTest
@@ -54,8 +56,8 @@ public class CalculatorServiceTest {
                                                                    BigDecimal averageNumOfDaysInMonth,
                                                                    BigDecimal averageSalary,
                                                                    Long vacationDays) {
-        Mockito.lenient().when(calculatorParams.getNdflRate()).thenReturn(ndflRate);
-        Mockito.when(calculatorParams.getAverageNumOfDaysInMonth()).thenReturn(averageNumOfDaysInMonth);
+        Mockito.lenient().when(serviceConstants.getNdflRate()).thenReturn(ndflRate);
+        Mockito.when(serviceConstants.getAverageNumOfDaysInMonth()).thenReturn(averageNumOfDaysInMonth);
 
         Assertions.assertThrows(ArithmeticException.class, () -> calculatorService.calculate(averageSalary, vacationDays));
     }

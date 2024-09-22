@@ -70,7 +70,8 @@ public class CalculatorControllerTest {
 
         Mockito.when(calculatorService.calculate(new BigDecimal("10"), 10L)).thenReturn(new BigDecimal("10"));
 
-        String expectedMessage = String.format("Параметр запроса averageSalary: [%s] задан неверно", averageSalary);
+        String expectedMessage = String.format(String.format("Параметр averageSalary:[%s] задан неверно. " +
+                "Ожидается число с десятичной точкой и не более 2 десятичных знаков.", averageSalary));
 
         mockMvc.perform(get("/calculacte")
                         .param("averageSalary", averageSalary)

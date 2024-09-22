@@ -3,7 +3,7 @@ package ru.neoflex.vacation_pay_calculator.services;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.neoflex.vacation_pay_calculator.configuration.CalculatorParams;
+import ru.neoflex.vacation_pay_calculator.configuration.ServiceConstants;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,18 +13,18 @@ import java.math.RoundingMode;
 @RequiredArgsConstructor
 public class CalculatorServiceImpl implements CalculatorService {
 
-    private final CalculatorParams calculatorParams;
+    private final ServiceConstants serviceConstants;
 
     @Override
     public BigDecimal calculate(BigDecimal averageSalary, Long vacationDays) {
 
-        BigDecimal averageDailyEarnings = averageSalary.divide(calculatorParams.getAverageNumOfDaysInMonth(), 2, RoundingMode.HALF_EVEN);
+        BigDecimal averageDailyEarnings = averageSalary.divide(serviceConstants.getAverageNumOfDaysInMonth(), 2, RoundingMode.HALF_EVEN);
         log.info("Среднедневной заработок {}", averageDailyEarnings);
 
         BigDecimal vacationPay = averageDailyEarnings.multiply(BigDecimal.valueOf(vacationDays)).setScale(2, RoundingMode.HALF_EVEN);
         log.info("Отпускные с НДФЛ {}", vacationPay);
 
-        BigDecimal incomeTax = vacationPay.multiply(calculatorParams.getNdflRate()).setScale(2, RoundingMode.HALF_EVEN);
+        BigDecimal incomeTax = vacationPay.multiply(serviceConstants.getNdflRate()).setScale(2, RoundingMode.HALF_EVEN);
         log.info("НДФЛ {}", incomeTax);
 
         BigDecimal vacationPayWithoutNdfl = vacationPay.subtract(incomeTax);

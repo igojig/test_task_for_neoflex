@@ -6,8 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import ru.neoflex.vacation_pay_calculator.dtos.ErrorMessage;
+import ru.neoflex.vacation_pay_calculator.dtos.ArgumentMismatchResponse;
 import ru.neoflex.vacation_pay_calculator.dtos.ValidationErrorResponse;
 import ru.neoflex.vacation_pay_calculator.dtos.Violation;
 
@@ -17,22 +16,26 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    /**
+     *
+     * обработчик исключений при приведении параметров запроса в числа
+     */
+    @ExceptionHandler(ArgumentMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorMessage> mismatchException(MethodArgumentTypeMismatchException e) {
+    public ResponseEntity<ArgumentMismatchResponse> mismatchException(ArgumentMismatchException e) {
 
-        String message = String.format("Параметр запроса %s: [%s] задан неверно",
-                e.getPropertyName(),
-                e.getValue());
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(new ErrorMessage(HttpStatus.BAD_REQUEST.value(), message));
-
+                .body(new ArgumentMismatchResponse(HttpStatus.BAD_REQUEST.value(), e.getMessage()));
     }
 
+    /**
+     *
+     * обработчик исключений при валидации параметров запроса
+     */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ValidationErrorResponse onConstraintValidationException(ConstraintViolationException e) {
+    public ValidationErrorResponse constraintValidationException(ConstraintViolationException e) {
 
         final List<Violation> violations = e.getConstraintViolations().stream()
                 .map(

@@ -5,6 +5,10 @@ import lombok.Getter;
 
 import java.util.List;
 
+/**
+ * класс, представляющий ответ сервиса в случае ошибок валидации параметров запроса
+ *
+ */
 @Getter
 @AllArgsConstructor
 public class ValidationErrorResponse {

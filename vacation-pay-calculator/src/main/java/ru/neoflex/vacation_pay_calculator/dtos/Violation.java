@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 
+/**
+ * класс, описывающий ошибку валидации
+ */
 @Getter
 @AllArgsConstructor
 public class Violation {

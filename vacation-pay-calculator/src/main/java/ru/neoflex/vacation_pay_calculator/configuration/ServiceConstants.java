@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 @Setter
 @ConfigurationProperties(prefix = "app.calculate")
 @Validated
-public class CalculatorParams {
+public class ServiceConstants {
     /**
      * ставка НДФЛ
      */
