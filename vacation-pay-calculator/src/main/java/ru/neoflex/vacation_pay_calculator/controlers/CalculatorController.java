@@ -22,6 +22,13 @@ public class CalculatorController {
 
     private final CalculatorService calculatorService;
 
+    /**
+     *
+     * @param averageSalary  среняя зарплата за 12 месяцев
+     * @param vacationDays  кол-во дней отпуска
+     * @return  начисленные отпускные
+     */
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<VacationPayCalculatorResponse> calculate(

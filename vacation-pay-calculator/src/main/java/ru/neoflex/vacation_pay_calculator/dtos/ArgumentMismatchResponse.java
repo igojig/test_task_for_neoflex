@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- * класс описывающий состояние ошибки в случае возникновения исключения
+ * класс описывающий ошибку в случае возникновения исключения
  * {@code ArgumentMismatchException} - ошибка приведения параметра запроса в число
  */
 @Data

@@ -27,15 +27,21 @@ public class CalculatorControllerTest {
     @MockBean
     private CalculatorService calculatorService;
 
+    /**
+     *
+     * @param averageSalary средняя зарплата за 12 месяцев
+     * @param vacationDays кол-во дней отпуска
+     * @param vacationPay ожидаемая сумма отпускных
+     */
     @ParameterizedTest
     @CsvSource({"50000, 20, 80000"})
     public void whenGivenCorrectData_thenReturnCorrectResult(BigDecimal averageSalary,
                                                              Long vacationDays,
-                                                             BigDecimal payments) throws Exception {
-        Mockito.when(calculatorService.calculate(averageSalary, vacationDays)).thenReturn(payments);
+                                                             BigDecimal vacationPay) throws Exception {
+        Mockito.when(calculatorService.calculate(averageSalary, vacationDays)).thenReturn(vacationPay);
 
         String expectedMessage = String.format("Средняя зп: [%s], дней отпуска: [%s]", averageSalary, vacationDays);
-        String expectedPayments = payments.toString();
+        String expectedVacationPay = vacationPay.toString();
 
         mockMvc.perform(get("/calculacte")
                         .param("averageSalary", averageSalary.toString())
@@ -44,15 +50,21 @@ public class CalculatorControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value(expectedMessage))
-                .andExpect(jsonPath("$.vacationPayWithoutNdfl").value(expectedPayments));
+                .andExpect(jsonPath("$.vacationPayWithoutNdfl").value(expectedVacationPay));
     }
 
+    /**
+     *
+     * @param averageSalary средняя зарплата за 12 месяцев
+     * @param vacationDays кол-во дней отпуска
+     * @param vacationPay ожидаемая сумма отпускных
+     */
     @ParameterizedTest
     @CsvSource({"50000, 20, 80000"})
     public void whenNotGivenVacationDays_ThenReturnViolationMessage(BigDecimal averageSalary,
                                                                     Long vacationDays,
-                                                                    BigDecimal payments) throws Exception {
-        Mockito.when(calculatorService.calculate(averageSalary, vacationDays)).thenReturn(payments);
+                                                                    BigDecimal vacationPay) throws Exception {
+        Mockito.when(calculatorService.calculate(averageSalary, vacationDays)).thenReturn(vacationPay);
 
         mockMvc.perform(get("/calculacte")
                         .param("averageSalary", averageSalary.toString())
@@ -63,6 +75,11 @@ public class CalculatorControllerTest {
                 .andExpect(jsonPath("$.violations[0].message").value("параметр vacationDays(кол-во дней отпуска) должен быть задан"));
     }
 
+    /**
+     *
+     * @param averageSalary средняя зарплата за 12 месяцев
+     * @param vacationDays кол-во дней отпуска
+     */
     @ParameterizedTest
     @CsvSource({"50rt000, 20"})
     public void whenNotGivenIncorrectValues_ThenReturnErrorMessage(String averageSalary,
@@ -82,6 +99,4 @@ public class CalculatorControllerTest {
                 .andExpect(jsonPath("$.errorCode").value(400))
                 .andExpect(jsonPath("$.message").value(expectedMessage));
     }
-
-
 }

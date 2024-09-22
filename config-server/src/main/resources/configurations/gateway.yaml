@@ -11,9 +11,9 @@ spring:
           lower-case-service-id: true
       routes:
         - id: main
-          uri: lb://vacation-pay-service
+          uri: lb://vacation-pay-calculator
           predicates:
-            - Path=/calculacte
+            - Path=/calculacte/**
             - Method=GET
 
 eureka:
@@ -22,4 +22,3 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
-

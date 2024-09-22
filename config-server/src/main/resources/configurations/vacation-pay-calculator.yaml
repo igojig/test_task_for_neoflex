@@ -2,7 +2,7 @@ server:
   port: 0
 spring:
   application:
-    name: vacation-pay-service
+    name: vacation-pay-calculator
 
 eureka:
   instance:

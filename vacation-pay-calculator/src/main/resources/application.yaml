@@ -1,7 +1,7 @@
 
 spring:
   application:
-    name: vacation-pay-service
+    name: vacation-pay-calculator
   config:
     import: optional:configserver:http://localhost:8888
 
