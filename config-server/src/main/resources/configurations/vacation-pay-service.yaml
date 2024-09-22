@@ -9,18 +9,10 @@ eureka:
     instance-id: ${spring.application.name}:${random.value}
     hostname: localhost
   client:
-    #    register-with-eureka: false
-    #    fetch-registry: false
     service-url:
       defaultZone: http://localhost:8761/eureka
-#  instance:
-#    preferIpAddress: true
 
-#logging:
-#  level:
-#    com.netflix.eureka: OFF
-#    com.netflix.discovery: OFF
-
-remote:
-  service:
-    url: https://isdayoff.ru
+app:
+  calculate:
+    ndflRate: "0.13"
+    averageNumOfDaysInMonth: "29.3"

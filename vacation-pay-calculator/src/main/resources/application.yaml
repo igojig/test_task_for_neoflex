@@ -1,10 +1,9 @@
-server:
-  port: 8081
+
 spring:
   application:
-    name: vacation-pay-calculator
-app:
-  calculate:
-    ndflRate: "0.13"
-    averageNumOfDaysInMonth: "29.3"
+    name: vacation-pay-service
+  config:
+    import: optional:configserver:http://localhost:8888
+
+
 
