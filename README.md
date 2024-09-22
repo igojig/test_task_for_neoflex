@@ -12,7 +12,7 @@ endpoint: `http://localhost:8080/calculacte`
 Параметры запроса:
  - `averageSalary` - средняя зарплата за 12 месяцев
    - число, может содержать десятичную точку и произвольное кол-во знаков после запятой (сервис при вычислениях округляет до двух знаков после запятой)
- - `vacationDays` - количестов дней отпуска
+ - `vacationDays` - количество дней отпуска
    - целое число
 
 
@@ -43,7 +43,9 @@ endpoint: `http://localhost:8080/calculacte`
     }
 ```
 
-2. Если указано невалидное значение, например `http://localhost:8080/calculacte&?averageSalary=LETTERS&vacationDays=25`
+2. Если указано невалидное значение, например
+
+   `http://localhost:8080/calculacte&?averageSalary=LETTERS&vacationDays=25`
 
     
 ```
