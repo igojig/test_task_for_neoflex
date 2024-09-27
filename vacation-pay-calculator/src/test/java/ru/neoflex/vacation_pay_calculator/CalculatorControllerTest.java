@@ -98,7 +98,7 @@ public class CalculatorControllerTest {
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
                 .andExpect(jsonPath("$.fieldName").value("averageSalary"))
-                .andExpect(jsonPath("$.value").value(averageSalary))
+                .andExpect(jsonPath("$.invalidValue").value(averageSalary))
                 .andExpect(jsonPath("$.message").exists());
     }
 }
