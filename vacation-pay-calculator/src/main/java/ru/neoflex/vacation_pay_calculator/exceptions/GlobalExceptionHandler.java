@@ -49,7 +49,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<MissingParameterResponse> missingServletRequestParameterException(MissingServletRequestParameterException e) {
 
         MissingParameterResponse missingParameterResponse = MissingParameterResponse.builder()
-                .fieldName(e.getParameterName())
+                .missingFieldName(e.getParameterName())
                 .message(e.getMessage())
                 .status(HttpStatus.BAD_REQUEST.value())
                 .build();

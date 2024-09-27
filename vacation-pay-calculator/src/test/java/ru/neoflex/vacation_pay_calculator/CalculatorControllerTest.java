@@ -75,7 +75,7 @@ public class CalculatorControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.fieldName").value("vacationDays"))
+                .andExpect(jsonPath("$.missingFieldName").value("vacationDays"))
                 .andExpect(jsonPath("$.message").exists());
     }
 

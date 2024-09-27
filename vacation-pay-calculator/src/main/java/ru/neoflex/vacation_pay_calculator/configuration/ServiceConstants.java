@@ -44,11 +44,4 @@ public class ServiceConstants {
     @Max(4)
     private int scaleValue;
 
-//    @NotNull
-//    private Map<Integer, List<Integer>> holidays;
-//
-//    @PostConstruct
-//    public void init(){
-//        System.out.println(holidays);
-//    }
 }
