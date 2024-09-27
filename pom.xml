@@ -7,10 +7,18 @@
     <groupId>ru.neoflex</groupId>
     <artifactId>test_task_for_neoflex</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>config-server</module>
+        <module>eureka-server</module>
+        <module>gateway</module>
+        <module>vacation-pay-calculator</module>
+    </modules>
 
     <properties>
-        <maven.compiler.source>17</maven.compiler.source>
-        <maven.compiler.target>17</maven.compiler.target>
+        <maven.compiler.source>11</maven.compiler.source>
+        <maven.compiler.target>11</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 

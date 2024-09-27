@@ -3,7 +3,7 @@ spring:
   application:
     name: vacation-pay-calculator
   config:
-    import: optional:configserver:http://localhost:8888
+    import: ${CONFIG_SERVER_URL:optional:configserver:http://localhost:8888}
 
 
 

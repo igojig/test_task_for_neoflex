@@ -6,8 +6,8 @@ import lombok.Getter;
 import java.util.List;
 
 /**
- * класс, представляющий ответ сервиса в случае ошибок валидации параметров запроса
- *
+ * класс представляющий ответ сервиса в случае возникновения исключения
+ * {@code ConstraintViolationException} - при ошибках валидации параметров запроса
  */
 @Getter
 @AllArgsConstructor

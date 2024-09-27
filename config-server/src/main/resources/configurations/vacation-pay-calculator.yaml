@@ -7,12 +7,39 @@ spring:
 eureka:
   instance:
     instance-id: ${spring.application.name}:${random.value}
-    hostname: localhost
+#    preferIpAddress: true
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka}
 
 app:
+  messages:
+    vacationPayCalculatorResponseMessageTemplate: "Средняя зп: [%s], дней отпуска: [%s]"
   calculate:
     ndflRate: "0.13"
     averageNumOfDaysInMonth: "29.3"
+    scaleValue: 2
+#    Список праздничных дней
+#    HashMap<месяц, день_недели>
+#    holidays:
+#      1:
+#        - 1
+#        - 2
+#        - 3
+#        - 4
+#        - 5
+#        - 6
+#        - 8
+#      2:
+#        - 23
+#      3:
+#        - 8
+#      5:
+#        - 1
+#        - 9
+#      6:
+#        - 12
+#      11:
+#        - 4
+

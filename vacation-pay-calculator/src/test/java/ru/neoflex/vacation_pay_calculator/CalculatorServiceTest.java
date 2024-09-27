@@ -27,21 +27,26 @@ public class CalculatorServiceTest {
     private CalculatorServiceImpl calculatorService;
 
     /**
-     * @param ndflRate ставка НДФЛ
+     * @param ndflRate                ставка НДФЛ
      * @param averageNumOfDaysInMonth среднее кол-во дней в месяце
-     * @param averageSalary средняя зарплата за 12 месяцев
-     * @param vacationDays  кол-во дней отпуска
-     * @param expectedVacationPay корректное значение начисленных отпускных
+     * @param scaleValue              до скольки знаков происходит округление
+     * @param averageSalary           средняя зарплата за 12 месяцев
+     * @param vacationDays            кол-во дней отпуска
+     * @param expectedVacationPay     корректное значение начисленных отпускных
      */
     @ParameterizedTest
-    @CsvSource({"0.13, 29.3, 50000, 20, 29692.75", "0.13, 29.3,5773, 7, 1199.91", "0.13, 29.3, 87923.34, 20, 52213.92"})
+    @CsvSource({"0.13, 29.3, 2, 50000, 20, 29692.75",
+            "0.13, 29.3, 2, 5773, 7, 1199.91",
+            "0.13, 29.3, 2, 87923.34, 20, 52213.92"})
     public void givenCorrectParams_thenResultCorrect(BigDecimal ndflRate,
                                                      BigDecimal averageNumOfDaysInMonth,
+                                                     Integer scaleValue,
                                                      BigDecimal averageSalary,
                                                      Long vacationDays,
                                                      BigDecimal expectedVacationPay) {
         Mockito.when(serviceConstants.getNdflRate()).thenReturn(ndflRate);
         Mockito.when(serviceConstants.getAverageNumOfDaysInMonth()).thenReturn(averageNumOfDaysInMonth);
+        Mockito.when(serviceConstants.getScaleValue()).thenReturn(scaleValue);
 
         BigDecimal actual = calculatorService.calculate(averageSalary, vacationDays);
 
@@ -51,11 +56,10 @@ public class CalculatorServiceTest {
     }
 
     /**
-     *
-     * @param ndflRate ставка НДФЛ
+     * @param ndflRate                ставка НДФЛ
      * @param averageNumOfDaysInMonth среднее кол-во дней в месяце
-     * @param averageSalary средняя зарплата за 12 месяцев
-     * @param vacationDays кол-во дней отпуска
+     * @param averageSalary           средняя зарплата за 12 месяцев
+     * @param vacationDays            кол-во дней отпуска
      */
     @ParameterizedTest
     @CsvSource({"0.13, 0, 50000, 20"})

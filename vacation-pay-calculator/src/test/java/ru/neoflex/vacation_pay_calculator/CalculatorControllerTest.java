@@ -8,11 +8,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import ru.neoflex.vacation_pay_calculator.configuration.ServiceMessages;
 import ru.neoflex.vacation_pay_calculator.controlers.CalculatorController;
 import ru.neoflex.vacation_pay_calculator.services.CalculatorService;
 
 import java.math.BigDecimal;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -27,11 +29,13 @@ public class CalculatorControllerTest {
     @MockBean
     private CalculatorService calculatorService;
 
+    @MockBean
+    private ServiceMessages serviceMessages;
+
     /**
-     *
      * @param averageSalary средняя зарплата за 12 месяцев
-     * @param vacationDays кол-во дней отпуска
-     * @param vacationPay ожидаемая сумма отпускных
+     * @param vacationDays  кол-во дней отпуска
+     * @param vacationPay   ожидаемая сумма отпускных
      */
     @ParameterizedTest
     @CsvSource({"50000, 20, 80000"})
@@ -39,6 +43,8 @@ public class CalculatorControllerTest {
                                                              Long vacationDays,
                                                              BigDecimal vacationPay) throws Exception {
         Mockito.when(calculatorService.calculate(averageSalary, vacationDays)).thenReturn(vacationPay);
+        Mockito.when(serviceMessages.getVacationPayCalculatorResponseMessageTemplate())
+                .thenReturn("Средняя зп: [%s], дней отпуска: [%s]");
 
         String expectedMessage = String.format("Средняя зп: [%s], дней отпуска: [%s]", averageSalary, vacationDays);
         String expectedVacationPay = vacationPay.toString();
@@ -54,38 +60,33 @@ public class CalculatorControllerTest {
     }
 
     /**
-     *
      * @param averageSalary средняя зарплата за 12 месяцев
-     * @param vacationDays кол-во дней отпуска
-     * @param vacationPay ожидаемая сумма отпускных
+     * @param vacationDays  кол-во дней отпуска
+     * @param vacationPay   ожидаемая сумма отпускных
      */
     @ParameterizedTest
     @CsvSource({"50000, 20, 80000"})
-    public void whenNotGivenVacationDays_ThenReturnViolationMessage(BigDecimal averageSalary,
-                                                                    Long vacationDays,
-                                                                    BigDecimal vacationPay) throws Exception {
-        Mockito.when(calculatorService.calculate(averageSalary, vacationDays)).thenReturn(vacationPay);
+    public void whenNotGivenVacationDays_ThenReturnMissingParameterResponse(BigDecimal averageSalary,
+                                                                            Long vacationDays,
+                                                                            BigDecimal vacationPay) throws Exception {
 
         mockMvc.perform(get("/calculacte")
-                        .param("averageSalary", averageSalary.toString())
+                        .param("averageSalary",  averageSalary.toString())
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.violations[0].fieldName").value("calculate.vacationDays"))
-                .andExpect(jsonPath("$.violations[0].message").value("параметр vacationDays(кол-во дней отпуска) должен быть задан"));
+                .andExpect(jsonPath("$.fieldName").value("vacationDays"))
+                .andExpect(jsonPath("$.message").exists());
     }
 
     /**
-     *
      * @param averageSalary средняя зарплата за 12 месяцев
-     * @param vacationDays кол-во дней отпуска
+     * @param vacationDays  кол-во дней отпуска
      */
     @ParameterizedTest
     @CsvSource({"50rt000, 20"})
-    public void whenNotGivenIncorrectValues_ThenReturnErrorMessage(String averageSalary,
+    public void whenGivenInvalidValues_ThenReturnArgumentMismatchResponse(String averageSalary,
                                                                    String vacationDays) throws Exception {
-
-        Mockito.when(calculatorService.calculate(new BigDecimal("10"), 10L)).thenReturn(new BigDecimal("10"));
 
         String expectedMessage = String.format(String.format("Параметр averageSalary:[%s] задан неверно. " +
                 "Ожидается число с десятичной точкой и не более 2 десятичных знаков.", averageSalary));
@@ -96,7 +97,8 @@ public class CalculatorControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().is4xxClientError())
-                .andExpect(jsonPath("$.errorCode").value(400))
-                .andExpect(jsonPath("$.message").value(expectedMessage));
+                .andExpect(jsonPath("$.fieldName").value("averageSalary"))
+                .andExpect(jsonPath("$.value").value(averageSalary))
+                .andExpect(jsonPath("$.message").exists());
     }
 }

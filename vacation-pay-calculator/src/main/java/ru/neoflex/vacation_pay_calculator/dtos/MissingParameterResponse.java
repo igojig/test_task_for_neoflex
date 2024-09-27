@@ -2,18 +2,16 @@ package ru.neoflex.vacation_pay_calculator.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 
 /**
  * класс представляющий ответ сервиса в случае возникновения исключения
- * {@code MethodArgumentTypeMismatchException} - ошибка приведения типа параметра запроса
+ * {@code MissingServletRequestParameterException} - когда не указан параметр запроса
  */
 @Getter
 @AllArgsConstructor
 @Builder
-public class ArgumentMismatchResponse {
-    private String fieldName;
-    private final String value;
-    private final String message;
+public class MissingParameterResponse {
+    private final String fieldName;
+    private  final String message;
 }

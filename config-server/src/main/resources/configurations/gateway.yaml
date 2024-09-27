@@ -1,3 +1,4 @@
+
 server:
   port: 8080
 spring:
@@ -14,11 +15,13 @@ spring:
           uri: lb://vacation-pay-calculator
           predicates:
             - Path=/calculacte/**
-            - Method=GET
+#            - Method=GET
+#          filters:
+#            - RewritePath=/department/(?<path>.*), /$\{path}
 
 eureka:
   instance:
-    hostname: localhost
+    hostname: ${EUREKA_INSTANCE_HOSTNAME:localhost}
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka
+      defaultZone: ${EUREKA_DEFAULT_ZONE:http://localhost:8761/eureka}

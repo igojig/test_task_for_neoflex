@@ -66,3 +66,5 @@ endpoint: `http://localhost:8080/calculacte`
 ## Стек
 Java 11, Spring Boot 3, Spring Cloud, Eureka Server, Spring Cloud Gateway, JUnit, Mockito
 
+
+
