@@ -1,6 +1,10 @@
 # Use a Java base image
 FROM openjdk:17-alpine
 
+RUN apk add --update \
+        curl \
+        && rm -rf /var/cache/apk/*
+
 # Set the working directory to /app
 WORKDIR /app
 

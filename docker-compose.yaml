@@ -4,6 +4,11 @@ services:
     container_name: config-server
     build: ./config-server
     image: neoflex-config-server
+    healthcheck:
+      test: ["CMD", "curl", "-I", "http://config-server:8888"]
+      start_interval: 30s
+      interval: 5s
+      retries: 10
     networks:
       - neoflex-network
 
@@ -17,8 +22,15 @@ services:
       CONFIG_SERVER_URL: optional:configserver:http://config-server:8888
       EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka
       EUREKA_INSTANCE_HOSTNAME: eureka-server
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://eureka-server:8761" ]
+      start_interval: 30s
+      interval: 5s
+      retries: 10
     depends_on:
-      - config-server
+      config-server:
+        condition: service_healthy
+        restart: true
     networks:
       - neoflex-network
 
@@ -32,8 +44,18 @@ services:
       CONFIG_SERVER_URL: optional:configserver:http://config-server:8888
       EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka
       EUREKA_INSTANCE_HOSTNAME: gateway
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://gateway:8080" ]
+      start_interval: 30s
+      interval: 5s
+      retries: 10
     depends_on:
-      - config-server
+      config-server:
+        condition: service_healthy
+        restart: true
+      eureka-server:
+        condition: service_healthy
+        restart: true
     networks:
       - neoflex-network
 
@@ -46,7 +68,11 @@ services:
       EUREKA_DEFAULT_ZONE: http://eureka-server:8761/eureka
       EUREKA_INSTANCE_HOSTNAME: vacation-pay-calculator
     depends_on:
-      - config-server
+      config-server:
+        condition: service_healthy
+        restart: true
+      gateway:
+        condition: service_healthy
     networks:
       - neoflex-network
 
