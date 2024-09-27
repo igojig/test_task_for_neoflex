@@ -12,6 +12,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Builder
 public class MissingParameterResponse {
+    private final int status;
     private final String fieldName;
     private  final String message;
 }

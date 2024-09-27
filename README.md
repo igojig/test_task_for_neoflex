@@ -7,7 +7,7 @@ GET "/calculacte"
 Доп. задание: При запросе также можно указать точные дни ухода в отпуск, тогда должен проводиться рассчет отпускных с учётом праздников и выходных.
 
 ## API
-endpoint: `http://localhost:8080/calculacte`
+`http://localhost:8080/calculacte`
 
 Параметры запроса:
  - `averageSalary` - средняя зарплата за 12 месяцев
@@ -21,8 +21,8 @@ endpoint: `http://localhost:8080/calculacte`
 ## Возвращаемый результат
 ```
 {
-"message": "Средняя зп: [42500.45], дней отпуска: [25]",
-"vacationPayWithoutNdfl": "31549.03"
+    "message": "Средняя зп: [42500.45], дней отпуска: [25]",
+    "vacationPayWithoutNdfl": "31549.03"
 }
 ```
 
@@ -33,29 +33,39 @@ endpoint: `http://localhost:8080/calculacte`
 
     
 ```
-    {
-        "violations": [
-            {
-                "fieldName": "calculate.averageSalary",
-                "message": "параметр averageSalary(средняя зарплата) должен быть задан"
-            }
-        ]
-    }
+{
+    "status": 400,
+    "fieldName": "averageSalary",
+    "message": "Required request parameter 'averageSalary' for method parameter type BigDecimal is not present"
+}
 ```
 
-2. Если указано невалидное значение, например
+2. Если указано невалидное значение:
 
    `http://localhost:8080/calculacte&?averageSalary=LETTERS&vacationDays=25`
 
     
 ```
-   {
-     "errorCode": 400,
-     "message": "Параметр averageSalary:[LETTERS] задан неверно. Ожидается число с десятичной точкой и не более 2 десятичных знаков."
-   }
+{
+    "status": 400,
+    "fieldName": "averageSalary",
+    "invalidValue": "LETTERS",
+    "message": "Failed to convert value of type 'java.lang.String' to required type 'java.math.BigDecimal'; Character L is neither a decimal digit number, decimal point, nor \"e\" notation exponential mark."
+}
 ```
-    
-
+3. Если указано некорректное значение:
+```
+{
+    "status": 400,
+    "violations": [
+        {
+            "fieldName": "calculate.averageSalary",
+            "invalidValue": "-50000",
+            "message": "параметр должен быть положительным числом"
+        }
+    ]
+}
+```
 
 ## Состав проекта
  - `config-server` - Spring Cloud Config Server
@@ -66,5 +76,10 @@ endpoint: `http://localhost:8080/calculacte`
 ## Стек
 Java 11, Spring Boot 3, Spring Cloud, Eureka Server, Spring Cloud Gateway, JUnit, Mockito
 
+## Docker
+````
+mvn clean package
+docker-compose up --build -d
+````
 
 

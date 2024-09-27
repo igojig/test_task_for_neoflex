@@ -1,6 +1,5 @@
 package ru.neoflex.vacation_pay_calculator.controlers;
 
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,9 +23,6 @@ public class CalculatorController {
     private final CalculatorService calculatorService;
     private final ServiceMessages serviceMessages;
 
-
-//    private final CountDaysWithoutHolidays countDaysWithoutHolidays;
-
     /**
      * @param averageSalary среняя зарплата за 12 месяцев
      * @param vacationDays  кол-во дней отпуска
@@ -44,25 +40,13 @@ public class CalculatorController {
             @Positive(message = "параметр должен быть положительным числом")
             Long vacationDays
 
-//            @RequestParam(value = "startDate") @DateTimeFormat(pattern = "dd-MM-yyyy") Optional<LocalDate> startDate
     ) {
 
-//        log.info(averageSalary.toString());
-//        log.info(vacationDays.toString());
-//        log.info(startDate.toString());
-
-        String message = String.format(serviceMessages.getVacationPayCalculatorResponseMessageTemplate(),
+        String message = String.format(serviceMessages.getResponseMessageTemplate(),
                 averageSalary,
                 vacationDays);
-//        String message = String.format("Средняя зп: [%s], дней отпуска: [%s]", averageSalary, vacationDays);
-
-//        if (startDate.isPresent()) {
-//            vacationDays = countDaysWithoutHolidays.calculate(vacationDays, startDate.get());
-//            log.info("Actual days is {}", vacationDays);
-//        }
 
         BigDecimal vacationPay = calculatorService.calculate(averageSalary, vacationDays);
-
 
         return new ResponseEntity<>(VacationPayCalculatorResponse.builder()
                 .message(message)

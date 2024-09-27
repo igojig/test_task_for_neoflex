@@ -12,5 +12,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 public class ValidationErrorResponse {
+    private final int status;
     private final List<Violation> violations;
 }

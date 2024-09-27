@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     /**
-     * обработчик исключений при валидации параметров запроса
+     * обработчик исключений при ошибках валидации параметров запроса
      */
     @ExceptionHandler(ConstraintViolationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -38,9 +38,12 @@ public class GlobalExceptionHandler {
                                 .build()
                 )
                 .collect(Collectors.toList());
-        return new ValidationErrorResponse(violations);
+        return new ValidationErrorResponse(HttpStatus.BAD_REQUEST.value(), violations);
     }
 
+    /**
+     * обработчик исключений при отсутствии параметра запроса
+     */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<MissingParameterResponse> missingServletRequestParameterException(MissingServletRequestParameterException e) {
@@ -48,6 +51,7 @@ public class GlobalExceptionHandler {
         MissingParameterResponse missingParameterResponse = MissingParameterResponse.builder()
                 .fieldName(e.getParameterName())
                 .message(e.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .build();
 
         return ResponseEntity
@@ -55,14 +59,18 @@ public class GlobalExceptionHandler {
                 .body(missingParameterResponse);
     }
 
+    /**
+     * обработчик исключений при ошибках преобразования типа параметра запроса
+     */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ArgumentMismatchResponse> methodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
 
         ArgumentMismatchResponse response = ArgumentMismatchResponse.builder()
                 .fieldName(e.getPropertyName())
-                .value(Objects.requireNonNull(e.getValue()).toString())
+                .invalidValue(Objects.requireNonNull(e.getValue()).toString())
                 .message(e.getMessage())
+                .status(HttpStatus.BAD_REQUEST.value())
                 .build();
 
 
@@ -70,6 +78,5 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(response);
     }
-
 
 }

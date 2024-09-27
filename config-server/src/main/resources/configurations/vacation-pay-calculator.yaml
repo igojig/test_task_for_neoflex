@@ -15,7 +15,7 @@ eureka:
 
 app:
   messages:
-    vacationPayCalculatorResponseMessageTemplate: "Средняя зп: [%s], дней отпуска: [%s]"
+    responseMessageTemplate: "Средняя зп: [%s], дней отпуска: [%s]"
   calculate:
     ndflRate: "0.13"
     averageNumOfDaysInMonth: "29.3"

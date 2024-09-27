@@ -43,7 +43,7 @@ public class CalculatorControllerTest {
                                                              Long vacationDays,
                                                              BigDecimal vacationPay) throws Exception {
         Mockito.when(calculatorService.calculate(averageSalary, vacationDays)).thenReturn(vacationPay);
-        Mockito.when(serviceMessages.getVacationPayCalculatorResponseMessageTemplate())
+        Mockito.when(serviceMessages.getResponseMessageTemplate())
                 .thenReturn("Средняя зп: [%s], дней отпуска: [%s]");
 
         String expectedMessage = String.format("Средняя зп: [%s], дней отпуска: [%s]", averageSalary, vacationDays);
