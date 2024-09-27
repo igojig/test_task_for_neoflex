@@ -35,7 +35,7 @@ GET "/calculacte"
 ```
 {
     "status": 400,
-    "fieldName": "averageSalary",
+    "missingFieldName": "averageSalary",
     "message": "Required request parameter 'averageSalary' for method parameter type BigDecimal is not present"
 }
 ```
@@ -73,13 +73,30 @@ GET "/calculacte"
  - `gateway` - Spring Cloud Gateway
  - `vacation-pay-calculator` - микросервис расчета отпускных
 
+## Установка и запуск
+`git clone https://github.com/igojig/test_task_for_neoflex.git`
+
+`mvn clean package`
+
+`mvn -f .\config-server\ spring-boot:run`
+
+`mvn -f .\eureka-server\ spring-boot:run`
+
+`mvn -f .\gateway\ spring-boot:run`
+
+`mvn -f .\vacation-pay-calculator\ spring-boot:run`
+
+## Docker
+`git clone https://github.com/igojig/test_task_for_neoflex.git`
+
+`mvn clean package`
+
+`docker-compose up --build -d`
+
+
 ## Стек
 Java 11, Spring Boot 3, Spring Cloud, Eureka Server, Spring Cloud Gateway, JUnit, Mockito
 
-## Docker
-````
-mvn clean package
-docker-compose up --build -d
-````
+
 
 
