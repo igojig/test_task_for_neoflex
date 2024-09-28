@@ -55,7 +55,6 @@ services:
         restart: true
       eureka-server:
         condition: service_healthy
-        restart: true
     networks:
       - neoflex-network
 
